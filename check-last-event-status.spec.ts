@@ -83,8 +83,10 @@ describe('CheckLastEventStatus', () => {
     expect(loadLastEventRepository.callsCount).toBe(1)
   })
 
-  it('should return status done when there is no event', async () => {
+  it('should return status done when has no event', async () => {
     const { sut, loadLastEventRepository } = makeSut()
+
+    loadLastEventRepository.output = undefined
 
     const eventStatus = await sut.perform({ groupId })
   
@@ -125,8 +127,6 @@ describe('CheckLastEventStatus', () => {
       reviewDurationInHour: 1
     }
   
-    loadLastEventRepository.output = undefined
-  
     const eventStatus = await sut.perform({ groupId })
   
     expect(eventStatus.status).toBe('inReview')
@@ -141,8 +141,6 @@ describe('CheckLastEventStatus', () => {
       endDate: new Date(new Date().getTime() - reviewDurationInMs + 1),
       reviewDurationInHour
     }
-  
-    loadLastEventRepository.output = undefined
   
     const eventStatus = await sut.perform({ groupId })
   
@@ -159,8 +157,6 @@ describe('CheckLastEventStatus', () => {
       reviewDurationInHour
     }
   
-    loadLastEventRepository.output = undefined
-  
     const eventStatus = await sut.perform({ groupId })
   
     expect(eventStatus.status).toBe('inReview')
@@ -175,9 +171,7 @@ describe('CheckLastEventStatus', () => {
       endDate: new Date(new Date().getTime() - reviewDurationInMs - 1),
       reviewDurationInHour
     }
-  
-    loadLastEventRepository.output = undefined
-  
+    
     const eventStatus = await sut.perform({ groupId })
   
     expect(eventStatus.status).toBe('done')
